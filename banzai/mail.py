@@ -12,13 +12,13 @@ from banzai.models import Package
 class MailPackage(object):
 
     def __init__(self, email_from, name_from, subject, message, send_at=None,
-                 headers=[], attach_images=u'0', description=u''):
+                 headers=None, attach_images=u'0', description=u''):
         self.email_from = email_from
         self.name_from = name_from
         self.subject = subject
         self.message = message
         self.send_at = send_at
-        self.headers = headers
+        self.headers = list() if headers is None else headers
         self.attach_images = attach_images
         self.description = description
 
@@ -43,7 +43,9 @@ class MailPackage(object):
             else:
                 raise RuntimeError('recipients_list must be a dict or string!')
 
-    def add_recipient(self, email_to, name_to=u'', header={}, fields={}):
+    def add_recipient(self, email_to, name_to=u'', header=None, fields=None):
+        header = dict() if header is None else header
+        fields = dict() if fields is None else fields
         if self._generation_complete:
             raise RuntimeError('Impossibly add recipient, because '
                                'generation already complete!')

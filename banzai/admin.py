@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from banzai.models import Package, Report, ReportFBL
+from banzai.models import Package, Report, ReportFBL, Attachment
 
 
 class ReportInline(admin.StackedInline):
@@ -33,13 +33,27 @@ class ReportFBLInline(admin.StackedInline):
         return False
 
 
+class AttachmentInline(admin.StackedInline):
+
+    extra = 0
+    model = Attachment
+    verbose_name = u'файл'
+    readonly_fields = ('name', )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 class PackageAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'description', 'status', 'pack_id', 'emails_all',
                     'emails_correct', 'created_on',)
     readonly_fields = ('file', 'status', 'pack_id', 'emails_all',
                        'emails_correct', 'description', 'created_on',)
-    inlines = (ReportInline, ReportFBLInline,)
+    inlines = (AttachmentInline, ReportInline, ReportFBLInline,)
 
     def has_add_permission(self, request):
         return False

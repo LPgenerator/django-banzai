@@ -99,3 +99,14 @@ class ReportFBL(models.Model):
 
     def __unicode__(self):
         return self.email
+
+
+class Attachment(models.Model):
+    package = models.ForeignKey(Package, verbose_name=u'пакет',
+                                related_name='attachments')
+    name = models.CharField(u'название файла', max_length=255)
+    file = models.FileField(u'файл вложения',
+                            upload_to='django_banzai/attachments')
+
+    def __unicode__(self):
+        return self.name

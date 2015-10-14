@@ -1,3 +1,15 @@
+out_xml/
+
+# OSX
+.DS_Store
+
+# temp files
+*~
+~$*
+
+# IDE
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -8,51 +20,54 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/
+bin/
+# build/
+build/temp/
 develop-eggs/
-dist/
-downloads/
+# dist/
 eggs/
-lib/
+# lib/
 lib64/
 parts/
 sdist/
-var/
+# var/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
 
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
-htmlcov/
 .tox/
 .coverage
 .cache
 nosetests.xml
 coverage.xml
 
-# Translations
-*.mo
-*.pot
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Rope
+.ropeproject
 
 # Django stuff:
 *.log
+*.pot
 
 # Sphinx documentation
 docs/_build/
 
-# PyBuilder
-target/
+# Media files
+media/
 
-# Project specific files
-test_project/sqlite3.db
-django_banzai/
+# Database files
+*.db
+*.sqlite3
+
+# Excel files
+*.xls
+*.xlsx
