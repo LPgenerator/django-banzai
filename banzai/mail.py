@@ -5,20 +5,22 @@ from lxml import etree
 
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.files import File
 
-from banzai.models import Package
-
+from banzai.models import Package, Attachment
 
 class MailPackage(object):
 
     def __init__(self, email_from, name_from, subject, message, send_at=None,
-                 headers=None, attach_images=u'0', description=u''):
+                 headers=None, attach_images=u'0', description=u'',
+                 attachments=None):
         self.email_from = email_from
         self.name_from = name_from
         self.subject = subject
         self.message = message
         self.send_at = send_at
         self.headers = list() if headers is None else headers
+        self.attachments = list() if attachments is None else attachments
         self.attach_images = attach_images
         self.description = description
 
@@ -69,6 +71,15 @@ class MailPackage(object):
             xml_content = ContentFile(self.xml_tostring())
             package_obj.file.save(file_name, xml_content)
             package_obj.save()
+            for attachment in self.attachments:
+                filename = attachment.get_filename()
+                fp = open(filename, 'wb+')
+                fp.write(attachment.get_payload(decode=True))
+                djangofile = File(fp)
+                attach = Attachment(name=filename, package=package_obj)
+                attach.file.save(filename, djangofile)
+                attach.save()
+                fp.close()
             self._package = package_obj
         return self._package
 
@@ -106,6 +117,16 @@ class MailPackage(object):
         attach_images_tag.text = etree.CDATA(self.attach_images)
         body_tag.append(attach_images_tag)
         del attach_images_tag
+
+        for attach in self.attachments:
+            attach_tag = etree.Element(
+                'Attach',
+                name=attach.get_filename(),
+                mimetype=attach.get_content_type()
+            )
+            attach_tag.text = etree.CDATA(attach.get_payload())
+            body_tag.append(attach_tag)
+            del attach_tag
 
         if self.send_at is not None:
             send_at_tag = etree.Element('SendAt')

@@ -38,7 +38,7 @@ class AttachmentInline(admin.StackedInline):
     extra = 0
     model = Attachment
     verbose_name = u'файл'
-    readonly_fields = ('name', )
+    readonly_fields = ('name', 'file')
 
     def has_add_permission(self, request):
         return False

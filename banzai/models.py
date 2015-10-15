@@ -108,5 +108,9 @@ class Attachment(models.Model):
     file = models.FileField(u'файл вложения',
                             upload_to='django_banzai/attachments')
 
+    class Meta:
+        verbose_name = u'вложение'
+        verbose_name_plural = u'вложения'
+
     def __unicode__(self):
         return self.name
